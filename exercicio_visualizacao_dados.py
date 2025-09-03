@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-import matplotlib.pyplot as plp
 import seaborn as sns
 
 df = pd.read_csv('ecommerce_preparados.csv')
@@ -60,4 +59,5 @@ plt.show()
 corr = df[['Qtd_Vendidos_Cod', 'N_Avaliações']].corr()
 sns.heatmap(corr, annot=True, cmap='coolwarm')
 plt.title('Correlação Quantidade de Vendido e Avaliações')
+
 plt.show()
