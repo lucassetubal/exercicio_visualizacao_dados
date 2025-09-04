@@ -16,6 +16,25 @@ df['Marca'] = df['Marca'].str.title()
 df['Material'] = df['Material'].str.title()
 df['Temporada'] = df['Temporada'].str.title()
 
+#Criando um dicionário para padronizar os valores
+mapeamento_temporadas = {
+    'Não Definido': 'Indefinido',
+    'Outono/Inverno': 'Outono-Inverno',
+    'Outono-Inverno': 'Outono-Inverno',
+    'Primavera/Verão': 'Primavera-Verão',
+    'Primavera-Verão': 'Primavera-Verão',
+    'Primavera/Verão/Outono/Inverno': 'Todas as Estações',
+    'Primavera/Verão Outono/Inverno': 'Todas as Estações',
+    'Primavera-Verão Outono-Inverno': 'Todas as Estações',
+    'Primavera-Verão - Outono-Inverno': 'Todas as Estações'
+}
+
+# Aplicando a substituição
+df['Temporada'] = df['Temporada'].replace(mapeamento_temporadas)
+
+# Removendo valores irrelevantes como "2021"
+df = df[df['Temporada'] != '2021']
+
 print(df.head(10).to_string())
 print(df.tail(10).to_string())
 
@@ -23,18 +42,18 @@ print(df.tail(10).to_string())
 x = df['Temporada'].value_counts().index
 y = df['Temporada'].value_counts().values
 
-plt.figure(figsize=(15, 8))
+plt.figure(figsize=(10, 6))
 plt.bar(x, y, color='#60aa65')
 plt.title('Temporada')
 plt.xlabel('Vendas por Temporada')
 plt.ylabel('Quantidade')
-plt.xticks(rotation=50)
+plt.xticks(rotation=0)
 plt.show()
 
-#Gráfico de pizza
+#Gráfico de Pizza
 plt.figure(figsize=(15,8))
 plt.pie(y, labels=x, autopct='%.2f%%', startangle=90)
-plt.title('Distribuição de Nível de Venda por Temporada')
+plt.title('Distribuição de Vendas por Estação do Ano')
 plt.show()
 
 #Gráfico Pairplot - Dispersão e Histograma
@@ -42,7 +61,7 @@ sns.pairplot(df[['Qtd_Vendidos_Cod', 'Preço', 'Marca_Cod']])
 plt.show()
 
 #Gráfico de Densidade - Quantidade de Vendas
-plt.figure(figsize=(15,8))
+plt.figure(figsize=(10,6))
 sns.kdeplot(df['Qtd_Vendidos_Cod'], fill=True, color='#863e9c')
 plt.title('Densidade de Vendas')
 plt.xlabel('Quantidade de Vendas')
@@ -59,5 +78,4 @@ plt.show()
 corr = df[['Qtd_Vendidos_Cod', 'N_Avaliações']].corr()
 sns.heatmap(corr, annot=True, cmap='coolwarm')
 plt.title('Correlação Quantidade de Vendido e Avaliações')
-
 plt.show()
